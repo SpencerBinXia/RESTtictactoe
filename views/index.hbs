@@ -1,2 +1,32 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<!DOCTYPE html>
+<html>
+
+<link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+
+<head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<h1>Let's play {{title}}!</h1>
+<body>
+
+{{#unless name}}
+<div id="entername">
+    <form method="post" action="/ttt">
+        <label for="name">Enter your name to start playing:</label>
+        <input type="text" class="nameinput" autofocus="autofocus" name="name" placeholder="Name here">
+    </form>
+</div>
+{{/unless}}
+
+{{#if name}}Hello {{name}}, {{date}}{{/if}}
+
+</body>
+
+</html>
+
+
+
+
+

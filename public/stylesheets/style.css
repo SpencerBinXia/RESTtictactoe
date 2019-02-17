@@ -1,8 +1,28 @@
+h1 {
+  text-align: center;
+  font: 80px 'Cinzel', serif;
+}
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #fffdd0;
+  text-align: center;
+  font: 30px 'Garamond', serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#entername {
+  white-space: nowrap;
+}
+.nameinput {
+  width: 200px;
+  height: 40px;
+  font: 30px 'Garamond', serif;
+  border: 10px;
+  border-color: #ffffff;
+  outline: none;
+  background-color: #fffdd0;
 }
