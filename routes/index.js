@@ -6,18 +6,19 @@ router.get('/ttt', function(req, res, next)  {
   res.render('index', { title: 'Tic Tac Toe'});
 });
 
+/* POST home page once name is entered. */
 router.post('/ttt', function(req, res, next) {
     var name = req.body.name;
     var today = new Date().toLocaleString();
-    console.log(req.body.name);
-    console.log("anything");
-    console.log(today);
     res.render('index', { title: 'Tic Tac Toe', name: name, date: today});
 });
 
+/* API endpoint for TicTacToe JSON */
 router.post('/play', function(req,res, next) {
     console.log(req.body);
-
+    var newgrid = req.body;
+    //var ai = require("/controllers/tttAI.js");
+    res.send(newgrid);
 });
 
 module.exports = router;
