@@ -26,3 +26,28 @@ a {
   outline: none;
   background-color: #fffdd0;
 }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#board {
+  background-color: #ffffff;
+  padding: 0px;
+  margin: 0 auto;
+  margin-top: 25px;
+}
+
+#board tr td {
+  width: 120px;
+  height: 120px;
+  border: 1px solid #000000;
+  font-family: Helvetica;
+  font-size: 100px;
+}
+
+#board tr td:hover {
+  background: #e4e4e4;
+  cursor: pointer;
+}

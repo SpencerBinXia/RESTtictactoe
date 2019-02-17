@@ -5,6 +5,8 @@
 
 <head>
     <title>{{title}}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='/javascripts/table.js'></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
@@ -20,7 +22,21 @@
 </div>
 {{/unless}}
 
-{{#if name}}Hello {{name}}, {{date}}{{/if}}
+{{#if name}}
+    Hello {{name}}, {{date}}
+    <br>
+    <table id='board'>
+        <tr>
+            <td id="c1"></td><td id="c2"></td><td id="c3"></td>
+        </tr>
+        <tr>
+            <td id="c4"></td><td id="c5"></td><td id="c6"></td>
+        </tr>
+        <tr>
+            <td id="c7"></td><td id="c8"></td><td id="c9"></td>
+        </tr>
+    </table>
+{{/if}}
 
 </body>
 

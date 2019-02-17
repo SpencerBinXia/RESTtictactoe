@@ -15,4 +15,9 @@ router.post('/ttt', function(req, res, next) {
     res.render('index', { title: 'Tic Tac Toe', name: name, date: today});
 });
 
+router.post('/play', function(req,res, next) {
+    console.log(req.body);
+
+});
+
 module.exports = router;
