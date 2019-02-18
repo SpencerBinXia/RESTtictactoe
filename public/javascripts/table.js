@@ -15,7 +15,7 @@ $(document).ready(function()
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
-                url: "/play",
+                url: "/ttt/play",
                 data: grid,
                 dataType: "json",
                 cache: false,

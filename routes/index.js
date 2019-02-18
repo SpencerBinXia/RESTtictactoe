@@ -16,7 +16,7 @@ router.post('/ttt', function(req, res, next) {
 });
 
 /* API endpoint for TicTacToe JSON */
-router.post('/play', function(req,res, next) {
+router.post('/ttt/play', function(req,res, next) {
    // console.log(req.body);
     var board = req.body;
 
@@ -26,7 +26,7 @@ router.post('/play', function(req,res, next) {
     if (winCell === "X" || winCell === "O")
     {
         board["winner"] = winCell;
-        res.send(board);
+        res.status(200).send(board);
     }
     else
     {
@@ -34,7 +34,7 @@ router.post('/play', function(req,res, next) {
         winCell = tttGame.winner(board.grid);
         board["grid"] = newboard;
         board["winner"] = winCell;
-        res.send(board);
+        res.status(200).send(board);
     }
     //var newgrid = JSON.stringify({grid: board, winner: winCell});
     //console.log(newgrid);;
