@@ -6,9 +6,47 @@
 <head>
     <title>{{title}}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='/javascripts/handler.js'></script>
     <script src='/javascripts/table.js'></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
+
+<header>
+
+    <div id="logindrop" class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" style="color: #4e555b; background-color: #fffdd0;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Login
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="color: #4e555b; background-color: #fffdd0;">
+            <form method="POST" action="/login">
+                <input type="text" class="dropdown-item" name="username" required="required" placeholder="Username">
+                <input type="text" class="dropdown-item" name="password" required="required" placeholder="Password">
+                <input type="submit" a class="dropdown-item"/>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerdrop" class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" style="color: #4e555b; background-color: #fffdd0;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Register
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="color: #4e555b; background-color: #fffdd0;">
+            <form method="POST" name="registration" action="/adduser">
+                <input type="text" class="dropdown-item" name="username" required="required" placeholder="Username">
+                <input type="text" class="dropdown-item" name="password" required="required" placeholder="Password">
+                <input type="text" class="dropdown-item" name="email" required="required" placeholder="Email">
+                <input type="submit" class="dropdown-item"/>
+            </form>
+        </div>
+    </div>
+
+</header>
 
 <h1>Let's play {{title}}!</h1>
 <body>
@@ -41,6 +79,10 @@
 {{/if}}
 
 </body>
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </html>
 

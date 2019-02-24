@@ -4,7 +4,7 @@ h1 {
 }
 
 body {
-  padding: 50px;
+  /*padding: 50px;*/
   background-color: #fffdd0;
   text-align: center;
   font: 30px 'Garamond', serif;
@@ -12,6 +12,37 @@ body {
 
 a {
   color: #00B7FF;
+}
+
+header {
+  display:inline-block;
+  margin-top:10px;
+  color: #3C6478;
+}
+
+#logindrop {
+  position: absolute;
+  left: 10px;
+}
+#registerdrop {
+  position: absolute;
+  left: 100px;
+}
+ul > li {
+  display: inline-block;
+  /* You can also add some margins here to make it look prettier */
+  padding-right:30px;
+  zoom:1;
+  *display:inline;
+  /* this fix is needed for IE7- */
+}
+
+#li1 {
+  padding-right: 50px;
+}
+
+h1 {
+  padding-top: 80px;
 }
 
 #entername {
