@@ -5,15 +5,24 @@ var tttGame = require('../controllers/tttGame');
 
 /* GET home page. */
 router.get('/ttt', function(req, res, next)  {
-  res.render('index', { title: 'Tic Tac Toe'});
+    if (req.session.username){
+        var today = new Date().toLocaleString();
+        res.render('index', {title: 'Tic Tac Toe', name: req.session.username, date: today});
+    }
+    else
+        {
+        res.render('index', {title: 'Tic Tac Toe'});
+    }
 });
 
-/* POST home page once name is entered. */
+/*
+POST home page once name is entered.
 router.post('/ttt', function(req, res, next) {
     var name = req.body.name;
     var today = new Date().toLocaleString();
-    res.render('index', { title: 'Tic Tac Toe', name: name, date: today});
+    res.render('index', {title: 'Tic Tac Toe', name: name, date: today});
 });
+*/
 
 /* API endpoint for TicTacToe JSON */
 router.post('/ttt/play', function(req,res, next) {

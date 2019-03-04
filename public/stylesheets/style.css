@@ -28,6 +28,12 @@ header {
   position: absolute;
   left: 100px;
 }
+
+#logoutBtn {
+  position: absolute;
+  right: 25px;
+}
+
 ul > li {
   display: inline-block;
   /* You can also add some margins here to make it look prettier */

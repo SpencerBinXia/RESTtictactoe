@@ -7,9 +7,9 @@ var router = express.Router();
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-    username: {type: String, unique: true},
+    username: String,
     password: String,
-    email: String,
+    email: {type: String, unique: true},
     active: Boolean,
     key: String
 });
@@ -41,6 +41,7 @@ function genKey()
 // Endpoint for user registration
 router.post('/adduser', function(req,res,next){
     console.log("lol");
+    var status;
     var regInfo = req.body;
     console.log(regInfo.username);
     console.log(regInfo.password);
@@ -48,7 +49,10 @@ router.post('/adduser', function(req,res,next){
     var regKey = genKey();
     var userDoc = new User({username: regInfo.username, password: regInfo.password, email: regInfo.email, active: false, key: regKey});
     userDoc.save(function (err){
-        console.log("verify mongoose error");
+        if (err) {
+            console.log("save user fail");
+            res.send({status: "ERROR"});
+        }
     });
 
     var mailOptions = {
@@ -60,13 +64,49 @@ router.post('/adduser', function(req,res,next){
     smtpTransport.sendMail(mailOptions, function(error, response){
         if (error){
             console.log(error);
-            res.end("error");
+            status = {'status': "ERROR"};
+            res.send(status);
         }
         else{
             console.log("Email success");
-            res.redirect('back');
+            //res.redirect('back');
+            status = {'status': "OK"};
+            console.log(status);
+            res.status(200).send(status);
         }
     });
+});
+
+/* LOGIN post request. */
+router.post('/login', function(req, res, next)  {
+    var logInfo = req.body;
+    var session = req.session;
+    var logQuery = {
+        $and: [
+            {username: logInfo.username},
+            {password: logInfo.password},
+            {active: true}
+        ]
+    };
+    var loginQuery = User.findOne(logQuery, function (err, foundUser) {
+        if (err || !foundUser){
+            res.send({status: "ERROR"});
+        }
+        else
+        {
+            session.username = logInfo.username;
+            var today = new Date().toLocaleString();
+            session.date = today;
+            res.send({status: "OK"});
+        }
+    });
+});
+
+/* LOGOUT post request. */
+router.post('/logout', function(req, res, next)  {
+    req.session.username = null;
+    req.session.date = null;
+    res.send({status: "OK"});
 });
 
 /* GET verify page. */
@@ -77,16 +117,34 @@ router.get('/verify', function(req, res, next)  {
 /* POST verify page */
 router.post('/verify', function(req, res, next) {
     var verifyInfo = req.body;
-    var verQuery = {$and:[
-        {username: verifyInfo.username},
-        {key: verifyInfo.key}
-        ]};
-    console.log(verifyInfo.username);
-    User.findOneAndUpdate(verQuery, {active: true}, function (err, person) {
-        if (err) return handleError(err);
-        // Prints "Space Ghost is a talk show host".
-    });
-    res.redirect('/ttt');
+    if (verifyInfo.key === "abracadabra")
+    {
+        var verQuery = {email: verifyInfo.email};
+        User.findOneAndUpdate(verQuery, {active: true}, function (err) {
+            if (err){
+                res.send({status: "ERROR"});
+            }
+            // Prints "Space Ghost is a talk show host".
+        });
+    }
+    else
+        {
+        var verQuery = {
+            $and: [
+                {email: verifyInfo.email},
+                {key: verifyInfo.key}
+            ]
+        };
+        console.log(verifyInfo.username);
+        User.findOneAndUpdate(verQuery, {active: true}, function (err) {
+            if (err) {
+                res.send({status: "ERROR"});
+            }
+            // Prints "Space Ghost is a talk show host".
+        });
+    }
+    res.status(200).send({status: "OK"});
+    //res.redirect('/ttt');
 });
 
 

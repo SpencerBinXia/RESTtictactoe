@@ -6,6 +6,8 @@
 <head>
     <title>{{title}}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
     <script src='/javascripts/handler.js'></script>
     <script src='/javascripts/table.js'></script>
 
@@ -17,13 +19,15 @@
 
 <header>
 
+{{#unless name}}
+
     <div id="logindrop" class="dropdown show">
         <a class="btn btn-secondary dropdown-toggle" style="color: #4e555b; background-color: #fffdd0;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Login
         </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="color: #4e555b; background-color: #fffdd0;">
-            <form method="POST" action="/login">
+            <form method="POST" id="login" action="/login">
                 <input type="text" class="dropdown-item" name="username" required="required" placeholder="Username">
                 <input type="text" class="dropdown-item" name="password" required="required" placeholder="Password">
                 <input type="submit" a class="dropdown-item"/>
@@ -37,7 +41,7 @@
         </a>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="color: #4e555b; background-color: #fffdd0;">
-            <form method="POST" name="registration" action="/adduser">
+            <form method="POST" id="registration" action="/adduser">
                 <input type="text" class="dropdown-item" name="username" required="required" placeholder="Username">
                 <input type="text" class="dropdown-item" name="password" required="required" placeholder="Password">
                 <input type="text" class="dropdown-item" name="email" required="required" placeholder="Email">
@@ -46,19 +50,30 @@
         </div>
     </div>
 
+{{/unless}}
+
+{{#if name}}
+
+        <a class="btn btn-secondary" style="color: #4e555b; background-color: #fffdd0;" href="#" role="button" id="logoutBtn" aria-haspopup="true" aria-expanded="false">
+            Logout
+        </a>
+    </div>
+
+{{/if}}
+
 </header>
 
 <h1>Let's play {{title}}!</h1>
 <body>
 
-{{#unless name}}
+<!--
 <div id="entername">
     <form method="post" action="/ttt">
         <label for="name">Enter your name to start playing:</label>
         <input type="text" class="nameinput" autofocus="autofocus" name="name" placeholder="Name here">
     </form>
 </div>
-{{/unless}}
+-->
 
 {{#if name}}
     Hello {{name}}, {{date}}
