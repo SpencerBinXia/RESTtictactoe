@@ -17,7 +17,7 @@ $(document).ready(function()
             var grid = JSON.stringify({grid: tgrid});
             console.log(grid);
             */
-            var winner = " ";
+            var winner = undefined;
 
             $.ajax({
                 type: "POST",
@@ -103,7 +103,7 @@ $(document).ready(function()
             $("#winnertext").text("The computer has won!");
             $("#board tr td").css("pointer-events", "none");
         }
-        if (newgrid.winner === "t")
+        if (newgrid.winner === " ")
         {
             $("#winnertext").text("The game is a draw.");
             $("#board tr td").css("pointer-events", "none");

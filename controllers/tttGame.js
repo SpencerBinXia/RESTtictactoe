@@ -64,26 +64,35 @@ module.exports = {
         {
             return board.winner;
         }
-        else if ((board[0] === board[1] && board[0] === board[2]) ||
+        else if ((board[0] === "X" || board[0] === "O") &&
+            ((board[0] === board[1] && board[0] === board[2]) ||
             (board[0] === board[3] && board[0] === board[6]) ||
-            (board[0] === board[4] && board[0] === board[8]))
+            (board[0] === board[4] && board[0] === board[8])))
         {
             //console.debug("inside if reached");
             return board[0];
         }
-        else if ((board[1] === board[4] && board[1] === board[7])) {
+        else if ((board[1] === "X" || board[1] === "O") &&
+            (board[1] === board[4] && board[1] === board[7])) {
             return board[1];
         }
-        else if ((board[2] === board[5] && board[2] === board[8])) {
+        else if ((board[2] === "X" || board[0] === "2") &&
+            (board[2] === board[5] && board[2] === board[8])) {
             return board[2];
         }
-        else if ((board[3] === board[4] && board[3] === board[5])) {
+        else if ((board[3] === "X" || board[0] === "3") &&
+            (board[3] === board[4] && board[3] === board[5])) {
             return board[3];
         }
-        else if ((board[6] === board[7] && board[6] === board[8]) ||
-                  (board[6] === board[4] && board[6] === board[2]))
+        else if ((board[6] === "X" || board[6] === "O") &&
+            ((board[6] === board[7] && board[6] === board[8]) ||
+                  (board[6] === board[4] && board[6] === board[2])))
         {
             return board[6];
+        }
+        else
+        {
+            return undefined;
         }
     }
 };
