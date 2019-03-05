@@ -2,19 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var nodeMailer = require('nodemailer');
 var router = express.Router();
-
-//Mongoose User Schema
-var Schema = mongoose.Schema;
-
-var UserSchema = new Schema({
-    username: String,
-    password: String,
-    email: {type: String, unique: true},
-    active: Boolean,
-    key: String
-});
-
-var User = mongoose.model('User', UserSchema);
+var User = require('../Schemas/UserSchema').User;
 
 //nodemailer Object for email verification
 var smtpTransport = nodeMailer.createTransport({
@@ -38,7 +26,7 @@ function genKey()
     return text;
 }
 
-// Endpoint for user registration
+//Endpoint for user registration
 router.post('/adduser', function(req,res,next){
     console.log("lol");
     var status;
@@ -47,7 +35,7 @@ router.post('/adduser', function(req,res,next){
     console.log(regInfo.password);
     console.log(regInfo.email);
     var regKey = genKey();
-    var userDoc = new User({username: regInfo.username, password: regInfo.password, email: regInfo.email, active: false, key: regKey});
+    var userDoc = new User({username: regInfo.username, password: regInfo.password, email: regInfo.email, active: false, key: regKey, gamesPlayed: 0});
     userDoc.save(function (err){
         if (err) {
             console.log("save user fail");
@@ -106,6 +94,7 @@ router.post('/login', function(req, res, next)  {
 router.post('/logout', function(req, res, next)  {
     req.session.username = null;
     req.session.date = null;
+    req.session.grid = undefined;
     res.send({status: "OK"});
 });
 
@@ -120,11 +109,14 @@ router.post('/verify', function(req, res, next) {
     if (verifyInfo.key === "abracadabra")
     {
         var verQuery = {email: verifyInfo.email};
-        User.findOneAndUpdate(verQuery, {active: true}, function (err) {
-            if (err){
+        User.findOneAndUpdate(verQuery, {active: true}, function (err, result) {
+            if (err || !result){
                 res.send({status: "ERROR"});
             }
-            // Prints "Space Ghost is a talk show host".
+            else
+            {
+                res.status(200).send({status: "OK"});
+            }
         });
     }
     else
@@ -136,17 +128,17 @@ router.post('/verify', function(req, res, next) {
             ]
         };
         console.log(verifyInfo.username);
-        User.findOneAndUpdate(verQuery, {active: true}, function (err) {
-            if (err) {
+        User.findOneAndUpdate(verQuery, {active: true}, function (err, result) {
+            if (err || !result) {
                 res.send({status: "ERROR"});
             }
-            // Prints "Space Ghost is a talk show host".
+            else
+            {
+                res.status(200).send({status: "OK"});
+            }
         });
     }
-    res.status(200).send({status: "OK"});
-    //res.redirect('/ttt');
 });
-
 
 
 module.exports = router;

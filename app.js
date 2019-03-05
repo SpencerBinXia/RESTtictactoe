@@ -6,8 +6,8 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
+var indexRouter = require('./routes/index');
 //var gameController = require('./controllers/tttGame')
 
 var app = express();

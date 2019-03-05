@@ -86,4 +86,4 @@ module.exports = {
             return board[6];
         }
     }
-}
+};
