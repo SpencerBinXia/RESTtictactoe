@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var nodeMailer = require('nodemailer');
 var router = express.Router();
 var User = require('../Schemas/UserSchema').User;
+var Score = require('../Schemas/ScoreSchema').Score;
 
 
 //nodemailer Object for email verification
@@ -42,6 +43,13 @@ router.post('/adduser', function(req,res,next){
             console.log("save user fail");
             res.send({status: "ERROR"});
         }
+        var ScoreDoc = new Score({username: regInfo.username, human: 0, wopr: 0, tie: 0});
+        ScoreDoc.save(function (err) {
+            if (err) {
+                console.log("update error");
+                res.send({status: "ERROR"});
+            }
+        });
     });
 
     var mailOptions = {

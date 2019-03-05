@@ -86,7 +86,7 @@ router.post('/ttt/play', function(req,res, next) {
             board["winner"] = winCell;
             if (winCell === "X" || winCell === "O" || winCell === 't')
             {
-                gameCounter = gameCounter = gameCounter+1;
+                gameCounter = gameCounter+1;
                 console.log("gameend" + gameCounter);
                 playedUserGame(session.username, gameCounter);
                 console.log("finished game counter" + gameCounter);
@@ -132,66 +132,29 @@ function playedUserGame(username, counter)
 
 function updateScore(username, winner, counter)
 {
-    if (counter === 1)
+    if (winner === "X")
     {
-        console.log("create new score reached");
-        var ScoreDoc = new Score({username: username, human: 0, wopr: 0, tie: 0});
-        ScoreDoc.save(function (err) {
-            if (err) {
-                console.log("update error");
-            }
-            if (winner === "X")
-            {
-                Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
-                    if (err || !result) {
-                        return 0;
-                    }
-                });
-            }
-            else if (winner === "O")
-            {
-                Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
-                    if (err || !result) {
-                        return 0;
-                    }
-                });
-            }
-            else if (winner === "t")
-            {
-                Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
-                    if (err || !result) {
-                        return 0;
-                    }
-                });
+        Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
+            if (err || !result) {
+                return 0;
             }
         });
     }
-    else
+    else if (winner === "O")
     {
-        if (winner === "X")
-        {
-            Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
-                if (err || !result) {
-                    return 0;
-                }
-            });
-        }
-        else if (winner === "O")
-        {
-            Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
-                if (err || !result) {
-                    return 0;
-                }
-            });
-        }
-        else if (winner === "t")
-        {
-            Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
-                if (err || !result) {
-                    return 0;
-                }
-            });
-        }
+        Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
+            if (err || !result) {
+                return 0;
+            }
+        });
+    }
+    else if (winner === "t")
+    {
+        Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
+            if (err || !result) {
+                return 0;
+            }
+        });
     }
     return 1;
 }

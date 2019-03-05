@@ -98,7 +98,7 @@ $(document).ready(function() {
             cache: false,
             success: function (status) {
                 if (status.status === "OK") {
-                    console.log(status.games);
+                    console.log(status);
                 }
                 else if (status.status === "ERROR")
                 {
