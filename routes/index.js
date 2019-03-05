@@ -2,30 +2,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
 var User = require('../Schemas/UserSchema').User;
+var Game = require('../Schemas/GameSchema').Game;
+var Score = require('../Schemas/ScoreSchema').Score;
 
 var tttGame = require('../controllers/tttGame');
-
-//Mongoose Schema for games
-var Schema = mongoose.Schema;
-
-var GameSchema = new Schema({
-    id: String,
-    start_date: Date,
-    grid: [{type:String}],
-    winner: String
-});
-
-var Game = mongoose.model('Game', GameSchema);
-
-//Mongoose Schema for scores
-var ScoreSchema = new Schema({
-    username: {type: String, unique: true},
-    human: Number,
-    wopr: Number,
-    tie: Number
-});
-
-var Score = mongoose.model('Score', ScoreSchema);
 
 /* GET home page. */
 router.get('/ttt', function(req, res, next)  {
@@ -130,7 +110,7 @@ router.post('/ttt/play', function(req,res, next) {
 function saveGame(board, winner, username, counter)
 {
     var gameId = username + counter;
-    var gameDoc = new Game({id: gameId, start_date: new Date(), grid: board, winner: winner});
+    var gameDoc = new Game({id: gameId, player: username, start_date: new Date(), grid: board, winner: winner});
     gameDoc.save(function (err) {
         if (err) {
             return 0;

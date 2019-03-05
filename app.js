@@ -8,6 +8,7 @@ var logger = require('morgan');
 
 var userRouter = require('./routes/user');
 var indexRouter = require('./routes/index');
+var pastGameRouter = require('./routes/pastGames');
 //var gameController = require('./controllers/tttGame')
 
 var app = express();
@@ -41,6 +42,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use('/', indexRouter);
 app.use('/', userRouter);
+app.use('/', pastGameRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

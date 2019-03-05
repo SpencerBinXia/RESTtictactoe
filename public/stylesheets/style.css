@@ -29,6 +29,21 @@ header {
   left: 100px;
 }
 
+#listGamesBtn {
+    position: absolute;
+    right: 325px;
+}
+
+#getGameBtn {
+    position: absolute;
+    right: 225px;
+}
+
+#getScoreBtn {
+    position: absolute;
+    right: 125px;
+}
+
 #logoutBtn {
   position: absolute;
   right: 25px;

@@ -91,6 +91,73 @@ $(document).ready(function() {
         });
     });
 
+    $("#listGamesBtn").click(function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/listgames",
+            cache: false,
+            success: function (status) {
+                if (status.status === "OK") {
+                    console.log(status.games);
+                }
+                else if (status.status === "ERROR")
+                {
+                    alert("List games failed");
+                }
+            },
+            error: function (e) {
+                console.log("Failure: ", e);
+            }
+        });
+    });
+
+
+    $("#getScoreBtn").click(function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/getscore",
+            cache: false,
+            success: function (status) {
+                if (status.status === "OK") {
+                    console.log(status);
+                }
+                else if (status.status === "ERROR")
+                {
+                    alert("get score failed");
+                }
+            },
+            error: function (e) {
+                console.log("Failure: ", e);
+            }
+        });
+    });
+
+    $("#getGameBtn").click(function (e) {
+
+        var gameId = {id: "kobe2"};
+        var idJSON = JSON.stringify(gameId);
+        $.ajax({
+            type: "POST",
+            url: "/getgame",
+            contentType: "application/json",
+            data: idJSON,
+            dataType: "json",
+            cache: false,
+            success: function (status) {
+                if (status.status === "OK") {
+                    console.log(status);
+                }
+                else if (status.status === "ERROR")
+                {
+                    alert("get game failed");
+                }
+            },
+            error: function (e) {
+                console.log("Failure: ", e);
+            }
+        });
+    });
+
 
         /*
         $(function () {

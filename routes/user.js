@@ -4,6 +4,7 @@ var nodeMailer = require('nodemailer');
 var router = express.Router();
 var User = require('../Schemas/UserSchema').User;
 
+
 //nodemailer Object for email verification
 var smtpTransport = nodeMailer.createTransport({
     service: "gmail",
