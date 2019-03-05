@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
+
+<head>
+    <meta charset="UTF-8">
+    <title>356 Tic Tac Toe Verification Page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='/javascripts/handler.js'></script>
+    <script src='/javascripts/table.js'></script>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<h1>Verify your account.</h1>
+
+<body>
+
+<div id="entername">
+        <form method="POST" name="Verify" action="/verify">
+            <label for="email">Your email:</label>
+            <input type="text" name="email" required="required" placeholder="Email"><br>
+            <label for="name">Your key (sent through email):</label>
+            <input type="text" name="key" required="required" placeholder="Key"><br>
+            <input type="submit"/>
+        </form>
+    </form>
+</div>
+
+</body>
+</html>

@@ -54,63 +54,38 @@ router.post('/ttt/play', function(req,res, next) {
     console.log(session.grid);
 
     //Gets the amount of games the user has played
-    var counterQuery = User.findOne({username : session.username}, function(err, foundUser){
+    User.findOne({username : session.username}, function(err, foundUser){
         if(err){
             res.send({status: "ERROR"});
         }
         var gameCounter = foundUser.gamesPlayed;
-
-    });
-    counterQuery.then(function (doc){
-        gameCounter = doc.gamesPlayed;
-    });
-    console.log(gameCounter);
-
-    //New grid if current grid is undefined
-    if (session.grid === undefined)
-    {
-        session.grid = [" "," "," "," "," "," "," "," "," "];
-    }
-    var board = {grid: session.grid, winner: " "};
-    var move = req.body.move;
-    console.log(move);
-    if (move === null)
-    {
-        console.log("!move reached");
-        res.status(200).send(board);
-    }
-    else
-    {
-        board.grid[move] = "X";
-    }
-    console.log(board);
-    //console.debug(board);
-    var winCell = tttGame.winner(board.grid);
-    //console.log(winCell);
-    if (winCell === "X" || winCell === "O" || winCell === 't')
-    {
-        var playedQuery = playedUserGame(session.name);
-        console.log("finished game counter" + gameCounter);
-        var gameBool = saveGame(board.grid, winCell, session.username, gameCounter);
-        var scoreBool = updateScore(session.username, winCell, gameCounter);
-        if (gameBool === 0 || scoreBool === 0)
+        console.log("initial count" + gameCounter);
+        //New grid if current grid is undefined
+        if (session.grid === undefined)
         {
-            res.send({status: "ERROR"});
+            session.grid = [" "," "," "," "," "," "," "," "," "];
         }
-        board["winner"] = winCell;
-        req.session.grid = undefined;
+        var board = {grid: session.grid, winner: " "};
+        var move = req.body.move;
+        console.log(move);
+        if (move === null)
+        {
+            console.log("!move reached");
+            res.status(200).send(board);
+        }
+        else
+        {
+            board.grid[move] = "X";
+        }
         console.log(board);
-        res.status(200).send(board);
-    }
-    else
-    {
-        var newboard = tttGame.play(board.grid);
-        winCell = tttGame.winner(board.grid);
-        board["grid"] = newboard;
-        board["winner"] = winCell;
+        //console.debug(board);
+        var winCell = tttGame.winner(board.grid);
+        //console.log(winCell);
         if (winCell === "X" || winCell === "O" || winCell === 't')
         {
-            gameCounter = playedUserGame(session.name);
+            gameCounter = gameCounter+1;
+            console.log("gameend" + gameCounter);
+            playedUserGame(session.username, gameCounter);
             console.log("finished game counter" + gameCounter);
             var gameBool = saveGame(board.grid, winCell, session.username, gameCounter);
             var scoreBool = updateScore(session.username, winCell, gameCounter);
@@ -118,13 +93,38 @@ router.post('/ttt/play', function(req,res, next) {
             {
                 res.send({status: "ERROR"});
             }
+            board["winner"] = winCell;
             req.session.grid = undefined;
+            console.log(board);
+            res.status(200).send(board);
         }
-        console.log(board);
-        res.status(200).send(board);
-    }
-    //var newgrid = JSON.stringify({grid: board, winner: winCell});
-    //console.log(newgrid);;
+        else
+        {
+            var newboard = tttGame.play(board.grid);
+            winCell = tttGame.winner(board.grid);
+            board["grid"] = newboard;
+            board["winner"] = winCell;
+            if (winCell === "X" || winCell === "O" || winCell === 't')
+            {
+                gameCounter = gameCounter = gameCounter+1;
+                console.log("gameend" + gameCounter);
+                playedUserGame(session.username, gameCounter);
+                console.log("finished game counter" + gameCounter);
+                var gameBool = saveGame(board.grid, winCell, session.username, gameCounter);
+                var scoreBool = updateScore(session.username, winCell, gameCounter);
+                if (gameBool === 0 || scoreBool === 0)
+                {
+                    res.send({status: "ERROR"});
+                }
+                req.session.grid = undefined;
+            }
+            console.log(board);
+            res.status(200).send(board);
+        }
+        //var newgrid = JSON.stringify({grid: board, winner: winCell});
+        //console.log(newgrid);;
+
+    });
 });
 
 function saveGame(board, winner, username, counter)
@@ -139,60 +139,79 @@ function saveGame(board, winner, username, counter)
     return 1;
 }
 
-function playedUserGame(username)
+function playedUserGame(username, counter)
 {
-    User.findOneAndUpdate({username: username}, {$inc: {gamesPlayed: 1}}, function (err, result) {
-        if (err || !result){
+    console.log("playedGame function" + counter);
+    console.log("playedGame function" + username);
+    User.findOneAndUpdate({username: username}, {gamesPlayed: counter}, function (err, result) {
+        if (err){
             return 0;
-        }
-        else
-        {
-            return result.gamesPlayed;
         }
     });
 }
+
 function updateScore(username, winner, counter)
 {
-    var gameCounter;
-    User.findOne({username : username}, function(err, foundUser){
-        if(err){
-            res.send({status: "ERROR"});
-        } else {
-            gameCounter = foundUser.gamesPlayed;
-        }
-    });
     if (counter === 1)
     {
+        console.log("create new score reached");
         var ScoreDoc = new Score({username: username, human: 0, wopr: 0, tie: 0});
         ScoreDoc.save(function (err) {
             if (err) {
-                return 0;
+                console.log("update error");
+            }
+            if (winner === "X")
+            {
+                Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
+                    if (err || !result) {
+                        return 0;
+                    }
+                });
+            }
+            else if (winner === "O")
+            {
+                Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
+                    if (err || !result) {
+                        return 0;
+                    }
+                });
+            }
+            else if (winner === "t")
+            {
+                Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
+                    if (err || !result) {
+                        return 0;
+                    }
+                });
             }
         });
     }
-    if (winner === "X")
+    else
     {
-        Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
-            if (err || !result) {
-                return 0;
-            }
-        });
-    }
-    else if (winner === "O")
-    {
-        Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
-            if (err || !result) {
-                return 0;
-            }
-        });
-    }
-    else if (winner === "t")
-    {
-        Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
-            if (err || !result) {
-                return 0;
-            }
-        });
+        if (winner === "X")
+        {
+            Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
+                if (err || !result) {
+                    return 0;
+                }
+            });
+        }
+        else if (winner === "O")
+        {
+            Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
+                if (err || !result) {
+                    return 0;
+                }
+            });
+        }
+        else if (winner === "t")
+        {
+            Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
+                if (err || !result) {
+                    return 0;
+                }
+            });
+        }
     }
     return 1;
 }
