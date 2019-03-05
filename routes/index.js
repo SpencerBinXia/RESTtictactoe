@@ -37,6 +37,7 @@ router.post('/ttt/play', function(req,res, next) {
     User.findOne({username : session.username}, function(err, foundUser){
         if(err){
             res.send({status: "ERROR"});
+            return;
         }
         var gameCounter = foundUser.gamesPlayed;
         console.log("initial count" + gameCounter);
@@ -52,6 +53,7 @@ router.post('/ttt/play', function(req,res, next) {
         {
             console.log("!move reached");
             res.status(200).send(board);
+            return;
         }
         else
         {
@@ -73,6 +75,7 @@ router.post('/ttt/play', function(req,res, next) {
             req.session.grid = undefined;
             console.log(board);
             res.status(200).send(board);
+            return;
         }
         else
         {
@@ -92,6 +95,7 @@ router.post('/ttt/play', function(req,res, next) {
             }
             console.log(board);
             res.status(200).send(board);
+            return;
         }
         //var newgrid = JSON.stringify({grid: board, winner: winCell});
         //console.log(newgrid);;
@@ -106,6 +110,8 @@ function saveGame(board, winner, username, counter, res)
     gameDoc.save(function (err) {
         if (err) {
             res.send({status: "ERROR"});
+            console.log("inner moongoose error");
+            return;
         }
     });
     return 1;
@@ -118,6 +124,8 @@ function playedUserGame(username, counter, res)
     User.findOneAndUpdate({username: username}, {gamesPlayed: counter}, function (err, result) {
         if (err){
             res.send({status: "ERROR"});
+            console.log("inner moongoose error");
+            return;
         }
     });
 }
@@ -129,6 +137,8 @@ function updateScore(username, winner, counter)
         Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
             if (err || !result) {
                 res.send({status: "ERROR"});
+                console.log("inner moongoose error");
+                return;
             }
         });
     }
@@ -137,6 +147,8 @@ function updateScore(username, winner, counter)
         Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
             if (err || !result) {
                 res.send({status: "ERROR"});
+                console.log("inner moongoose error");
+                return;
             }
         });
     }
@@ -145,6 +157,8 @@ function updateScore(username, winner, counter)
         Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
             if (err || !result) {
                 res.send({status: "ERROR"});
+                console.log("inner moongoose error");
+                return;
             }
         });
     }
