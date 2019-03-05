@@ -35,7 +35,7 @@ router.post('/ttt/play', function(req,res, next) {
 
     //Gets the amount of games the user has played
     User.findOne({username : session.username}, function(err, foundUser){
-        if(err){
+        if(err || !foundUser){
             res.send({status: "ERROR"});
             return;
         }
