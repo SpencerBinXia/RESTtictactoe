@@ -65,14 +65,10 @@ router.post('/ttt/play', function(req,res, next) {
         {
             gameCounter = gameCounter+1;
             console.log("gameend" + gameCounter);
-            playedUserGame(session.username, gameCounter);
+            playedUserGame(session.username, gameCounter, res);
             console.log("finished game counter" + gameCounter);
-            var gameBool = saveGame(board.grid, winCell, session.username, gameCounter);
-            var scoreBool = updateScore(session.username, winCell, gameCounter);
-            if (gameBool === 0 || scoreBool === 0)
-            {
-                res.send({status: "ERROR"});
-            }
+            saveGame(board.grid, winCell, session.username, gameCounter, res);
+            updateScore(session.username, winCell, gameCounter, res);
             board["winner"] = winCell;
             req.session.grid = undefined;
             console.log(board);
@@ -88,14 +84,10 @@ router.post('/ttt/play', function(req,res, next) {
             {
                 gameCounter = gameCounter+1;
                 console.log("gameend" + gameCounter);
-                playedUserGame(session.username, gameCounter);
+                playedUserGame(session.username, gameCounter, res);
                 console.log("finished game counter" + gameCounter);
-                var gameBool = saveGame(board.grid, winCell, session.username, gameCounter);
-                var scoreBool = updateScore(session.username, winCell, gameCounter);
-                if (gameBool === 0 || scoreBool === 0)
-                {
-                    res.send({status: "ERROR"});
-                }
+                saveGame(board.grid, winCell, session.username, gameCounter, res);
+                updateScore(session.username, winCell, gameCounter, res);
                 req.session.grid = undefined;
             }
             console.log(board);
@@ -107,25 +99,25 @@ router.post('/ttt/play', function(req,res, next) {
     });
 });
 
-function saveGame(board, winner, username, counter)
+function saveGame(board, winner, username, counter, res)
 {
     var gameId = username + counter;
     var gameDoc = new Game({id: gameId, player: username, start_date: new Date(), grid: board, winner: winner});
     gameDoc.save(function (err) {
         if (err) {
-            return 0;
+            res.send({status: "ERROR"});
         }
     });
     return 1;
 }
 
-function playedUserGame(username, counter)
+function playedUserGame(username, counter, res)
 {
     console.log("playedGame function" + counter);
     console.log("playedGame function" + username);
     User.findOneAndUpdate({username: username}, {gamesPlayed: counter}, function (err, result) {
         if (err){
-            return 0;
+            res.send({status: "ERROR"});
         }
     });
 }
@@ -136,7 +128,7 @@ function updateScore(username, winner, counter)
     {
         Score.findOneAndUpdate({username: username}, {$inc: {human: 1}}, function (err, result) {
             if (err || !result) {
-                return 0;
+                res.send({status: "ERROR"});
             }
         });
     }
@@ -144,7 +136,7 @@ function updateScore(username, winner, counter)
     {
         Score.findOneAndUpdate({username: username}, {$inc: {wopr: 1}}, function (err, result) {
             if (err || !result) {
-                return 0;
+                res.send({status: "ERROR"});
             }
         });
     }
@@ -152,7 +144,7 @@ function updateScore(username, winner, counter)
     {
         Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
             if (err || !result) {
-                return 0;
+                res.send({status: "ERROR"});
             }
         });
     }
