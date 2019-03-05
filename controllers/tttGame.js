@@ -23,7 +23,7 @@ module.exports = {
 
         if (emptyCounter === 0)
         {
-            board.winner = "t";
+            board.winner = " ";
             return board;
         }
 
@@ -60,7 +60,7 @@ module.exports = {
 
     winner: function getWinner(board)
     {
-        if (board.winner === "t")
+        if (board.winner === " ")
         {
             return board.winner;
         }

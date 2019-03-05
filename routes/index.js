@@ -45,7 +45,7 @@ router.post('/ttt/play', function(req,res, next) {
         {
             session.grid = [" "," "," "," "," "," "," "," "," "];
         }
-        var board = {grid: session.grid, winner: " "};
+        var board = {grid: session.grid, winner: undefined};
         var move = req.body.move;
         console.log(move);
         if (move === null)
@@ -61,7 +61,7 @@ router.post('/ttt/play', function(req,res, next) {
         //console.debug(board);
         var winCell = tttGame.winner(board.grid);
         //console.log(winCell);
-        if (winCell === "X" || winCell === "O" || winCell === 't')
+        if (winCell === "X" || winCell === "O" || winCell === ' ')
         {
             gameCounter = gameCounter+1;
             console.log("gameend" + gameCounter);
@@ -80,7 +80,7 @@ router.post('/ttt/play', function(req,res, next) {
             winCell = tttGame.winner(board.grid);
             board["grid"] = newboard;
             board["winner"] = winCell;
-            if (winCell === "X" || winCell === "O" || winCell === 't')
+            if (winCell === "X" || winCell === "O" || winCell === ' ')
             {
                 gameCounter = gameCounter+1;
                 console.log("gameend" + gameCounter);
@@ -140,7 +140,7 @@ function updateScore(username, winner, counter)
             }
         });
     }
-    else if (winner === "t")
+    else if (winner === " ")
     {
         Score.findOneAndUpdate({username: username}, {$inc: {tie: 1}}, function (err, result) {
             if (err || !result) {
